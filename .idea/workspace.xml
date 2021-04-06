@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="BranchesTreeState">
+    <expand>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="LOCAL_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="GROUP_NODE:origin" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+    </expand>
+    <select />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="2df67385-e313-4385-a6fa-e4665b4a182f" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/yield-scan/src/app/http/httpclient.service.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/yield-scan/src/assets/compound.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/yield-scan/src/assets/curve.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/yield-scan/src/assets/dai.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/yield-scan/src/assets/idleFinance.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/yield-scan/src/assets/usdc.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/yield-scan/src/assets/usdt.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/yield-scan/src/assets/yearn.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/yield-scan/src/dai.png" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="TypeScript File" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectId" id="1pqBxjflODg4pnR0fkTRl1Q8vnV" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="ASKED_SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../token-farm" />
+    <property name="node.js.detected.package.tslint" value="true" />
+    <property name="node.js.path.for.package.tslint" value="project" />
+    <property name="node.js.selected.package.tslint" value="(autodetect)" />
+    <property name="nodejs_package_manager_path" value="npm" />
+    <property name="ts.external.directory.path" value="E:\BlockchainProjects\yield-scan\yield-scan\node_modules\typescript\lib" />
+    <property name="vue.rearranger.settings.migration" value="true" />
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="2df67385-e313-4385-a6fa-e4665b4a182f" name="Default Changelist" comment="" />
+      <created>1615900988440</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1615900988440</updated>
+      <workItem from="1615900990396" duration="9468000" />
+      <workItem from="1616461538519" duration="1264000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+    <option name="oldMeFiltersMigrated" value="true" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="1088" y="580" key="#TSLint" timestamp="1615902475089">
+      <screen x="0" y="0" width="2560" height="1440" />
+    </state>
+    <state x="1088" y="580" key="#TSLint/0.0.2560.1440@0.0.2560.1440" timestamp="1615902475089" />
+    <state x="1594" y="358" key="FileChooserDialogImpl" timestamp="1615906237692">
+      <screen x="0" y="0" width="2560" height="1440" />
+    </state>
+    <state x="1594" y="358" key="FileChooserDialogImpl/0.0.2560.1440@0.0.2560.1440" timestamp="1615906237692" />
+  </component>
+</project>

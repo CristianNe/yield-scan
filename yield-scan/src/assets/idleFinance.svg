@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="24px" height="24px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 55.2 (78181) - https://sketchapp.com -->
+    <title>TwitterPic Copy 6</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <linearGradient x1="50%" y1="0%" x2="50%" y2="100%" id="linearGradient-1">
+            <stop stop-color="#6FA4F2" offset="0%"></stop>
+            <stop stop-color="#0F6BEB" offset="52.4255701%"></stop>
+            <stop stop-color="#0B50B0" offset="100%"></stop>
+        </linearGradient>
+        <linearGradient x1="71.8795863%" y1="117.226664%" x2="43.4347868%" y2="29.7273462%" id="linearGradient-2">
+            <stop stop-color="#6FA4F2" offset="3.765791e-05%"></stop>
+            <stop stop-color="#0F6BEB" offset="50.51%"></stop>
+            <stop stop-color="#0B50B0" offset="100%"></stop>
+        </linearGradient>
+        <linearGradient x1="57.7676226%" y1="73.9720911%" x2="29.3227695%" y2="-13.5273592%" id="linearGradient-3">
+            <stop stop-color="#6FA4F2" offset="3.765791e-05%"></stop>
+            <stop stop-color="#0F6BEB" offset="50.51%"></stop>
+            <stop stop-color="#0B50B0" offset="100%"></stop>
+        </linearGradient>
+    </defs>
+    <g id="Logos" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="TwitterPic-Copy-6">
+            <rect id="Rectangle" x="0" y="0" width="24" height="24"></rect>
+            <path d="M12.03,23.1 C18.1769293,23.1 23.16,18.1169293 23.16,11.97 C23.16,5.82307073 18.1769293,0.84 12.03,0.84 C5.88307073,0.84 0.9,5.82307073 0.9,11.97 C0.9,15.3789728 2.43259605,18.4299887 4.84635514,20.4716145 C5.00895707,20.6091479 5.17555772,20.7421006 5.34595792,20.8702736 C7.20717235,22.2702565 9.52168769,23.1 12.03,23.1 Z" id="Oval" stroke="url(#linearGradient-1)" fill="#FFFFFF"></path>
+            <g id="Group-Copy-2" transform="translate(6.840000, 5.580000)">
+                <polygon id="Path" fill="url(#linearGradient-2)" points="4.47286432 0 4.47286432 10.3070352 0.0281017654 10.3070352 0 10.2910356 0 2.57292557 0.170617861 2.47459508"></polygon>
+                <polygon id="Path" fill="url(#linearGradient-3)" points="5.89899497 12.9 5.89899497 2.59296482 10.3437575 2.59296482 10.3718593 2.60896436 10.3718593 10.3270744 10.2012414 10.4254049"></polygon>
+            </g>
+        </g>
+    </g>
+</svg>

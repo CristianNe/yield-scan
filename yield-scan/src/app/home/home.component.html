@@ -1,0 +1,35 @@
+
+<table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+  <ng-container matColumnDef="protocol">
+    <th mat-header-cell *matHeaderCellDef>
+      Protocol
+    </th>
+    <td mat-cell *matCellDef="let protocol">
+      <img src="{{protocol.logo}}" height="32" alt="">&nbsp;&nbsp;{{protocol.name}}
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="dai">
+    <th mat-header-cell *matHeaderCellDef>
+      <img src="{{daiLogo}}" height="32" alt=""> &nbsp;&nbsp;DAI
+    </th>
+    <td mat-cell *matCellDef="let protocol"> {{protocol.dai}}% </td>
+  </ng-container>
+
+  <ng-container matColumnDef="usdc">
+    <th mat-header-cell *matHeaderCellDef>
+      <img src="{{usdcLogo}}" height="32" alt=""> &nbsp;&nbsp;USDC
+    </th>
+    <td mat-cell *matCellDef="let protocol"> {{protocol.usdc}}% </td>
+  </ng-container>
+
+  <ng-container matColumnDef="tether">
+    <th mat-header-cell *matHeaderCellDef>
+      <img src="{{usdtLogo}}" height="32" alt=""> &nbsp;&nbsp;TETHER
+    </th>
+    <td mat-cell *matCellDef="let protocol"> {{protocol.tether}}% </td>
+  </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+</table>
