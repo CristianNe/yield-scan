@@ -1,14 +1,14 @@
 <mat-toolbar>
   <span> YieldScan </span>
 </mat-toolbar>
-<mat-drawer-container>
+<mat-drawer-container class="main-mat-drawer-container">
   <mat-drawer mode="side" opened>
     <mat-list>
       <mat-list-item>
-        <mat-button routerLink="/home">Interest rates</mat-button>
+        <button mat-button color="accent" class="mat-drawer-menu-button" routerLink="/home">Interest rates</button>
       </mat-list-item>
       <mat-list-item>
-        <mat-button routerLink="/history">History</mat-button>
+        <button mat-button color="accent" class="mat-drawer-menu-button" routerLink="/history">History</button>
       </mat-list-item>
     </mat-list>
   </mat-drawer>
