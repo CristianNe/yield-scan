@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import {HttpClientService} from "../http/httpclient.service";
 
 export interface Protocol {
   name: string;
@@ -27,15 +28,55 @@ const INTEREST_RATES: Protocol[] = [
 })
 export class HomeComponent implements OnInit {
 
-  constructor() { }
+  constructor(public httpService: HttpClientService) { }
 
   ngOnInit(): void {
+    this.fetchAaveInterestRates();
   }
+
+  stablecoins = ['dai', 'usdt', 'usdc']
   daiLogo = '../../assets/dai.svg'
   usdcLogo = '../../assets/usdc.svg'
   usdtLogo = '../../assets/usdt.svg'
 
+  aaveProtocol: Protocol =  { name: 'Aave', logo: aaveLogo, dai: '', usdc: '', tether: ''};
+  compoundProtocol: Protocol = { name: 'Compound', logo: compoundLogo, dai: '', usdc: '', tether: ''};
+  idleFinanceProtocol: Protocol = { name: 'Idle Finance', logo: idleFinanceLogo, dai: '', usdc: '', tether: ''};
+  curveProtocol: Protocol = { name: 'Curve Y', logo: curveLogo, dai: '', usdc: '', tether: ''};
+
 
   displayedColumns: string[] = ['protocol','dai', 'usdc', 'tether'];
   dataSource = INTEREST_RATES
+
+  fetchAaveInterestRates(): void {
+    this.httpService.getAavePools().subscribe((res) => {
+      console.log('response: \n' + res);
+      if(res.headers.status == 200) {
+        this.extractAaveInterestRates(res.body);
+      }
+    })
+  }
+
+  extractAaveInterestRates(data: []): void{
+    let daiRate = ''
+    let usdtRate = ''
+    let usdcRate = ''
+
+    data.forEach((crypto, index) => {
+      if(crypto.symbol.toLowerCase() == 'dai'){
+        daiRate = crypto.liquidityRate;
+      }
+      else if(crypto.symbol.toLowerCase() == 'usdt'){
+        usdtRate = crypto.liquidityRate;
+      }
+      else if(crypto.symbol.toLowerCase() == 'usdc'){
+        daiRate = crypto.liquidityRate;
+      }
+
+      if(daiRate != '' && usdtRate != '' && usdcRate != '')
+      {
+        return;
+      }
+    })
+  }
 }
