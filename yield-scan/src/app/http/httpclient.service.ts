@@ -11,8 +11,8 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 export class HttpClientService {
 
   // REST API endpoints
-  aave_endpoint = 'https://aave-api-v2.aave.com'
-  aave_poolId = '0xb53c1a33016b2dc2ff3653530bff1848a515c8c5'
+  aave_endpoint = 'https://aave-api-v2.aave.com';
+  yearn_endpoint = 'https://dev-api.yearn.tools';
 
   constructor(private httpClient: HttpClient) {
   }
@@ -24,16 +24,31 @@ export class HttpClientService {
   }
 
   getAavePools(): Observable<any> {
-    const timestamp = Date.now() / 1000;
-    return this.httpClient.get<any>(this.aave_endpoint +
-      '/data/liquidity/v2?poolId=' + this.aave_poolId + '&timestamp=' + timestamp)
+    // ToDO: find out about correct timestamp generation / permissible timestamps
+    const timestamp = 1612997018; //~~(Date.now() / 1000);
+    const aave_poolId = '0xb53c1a33016b2dc2ff3653530bff1848a515c8c5';
+    return this.httpClient.get(this.aave_endpoint +
+      '/data/liquidity/v2?poolId=' + aave_poolId + '&timestamp=' + timestamp,
+      {headers: this.httpHeader.headers }
+    )
       .pipe(
         retry(1),
         catchError(this.processError)
       )
   }
 
-  processError(err) {
+  getYearnVaults(): Observable<any> {
+    // ToDO: find out about correct timestamp generation / permissible timestamps
+    return this.httpClient.get(this.aave_endpoint + '/vaults/apy',
+      {headers: this.httpHeader.headers }
+    )
+      .pipe(
+        retry(1),
+        catchError(this.processError)
+      )
+  }
+
+  processError(err: any) {
     let message = '';
     if(err.error instanceof ErrorEvent) {
       message = err.error.message;
@@ -44,4 +59,15 @@ export class HttpClientService {
     return throwError(message);
   }
 
+  // ToDO
+  getCompoundPools(): Observable<any> {
+    // ToDO: find out about correct timestamp generation / permissible timestamps
+    return this.httpClient.get(this.aave_endpoint + '/vaults/apy',
+      {headers: this.httpHeader.headers }
+    )
+      .pipe(
+        retry(1),
+        catchError(this.processError)
+      )
+  }
 }
