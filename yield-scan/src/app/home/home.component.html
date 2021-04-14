@@ -23,11 +23,11 @@
     <td mat-cell *matCellDef="let protocol"> {{protocol.usdc}}% </td>
   </ng-container>
 
-  <ng-container matColumnDef="tether">
+  <ng-container matColumnDef="usdt">
     <th mat-header-cell *matHeaderCellDef>
-      <img src="{{usdtLogo}}" height="32" alt=""> &nbsp;&nbsp;TETHER
+      <img src="{{usdtLogo}}" height="32" alt=""> &nbsp;&nbsp;USDT
     </th>
-    <td mat-cell *matCellDef="let protocol"> {{protocol.tether}}% </td>
+    <td mat-cell *matCellDef="let protocol"> {{protocol.usdt}}% </td>
   </ng-container>
 
   <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>

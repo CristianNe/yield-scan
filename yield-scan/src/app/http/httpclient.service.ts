@@ -13,6 +13,7 @@ export class HttpClientService {
   // REST API endpoints
   aave_endpoint = 'https://aave-api-v2.aave.com';
   yearn_endpoint = 'https://dev-api.yearn.tools';
+  compound_endpoint = 'https://api.compound.finance/api/v2';
 
   constructor(private httpClient: HttpClient) {
   }
@@ -37,9 +38,21 @@ export class HttpClientService {
       )
   }
 
+  // ToDO
+  getCompoundPools(): Observable<any> {
+    // ToDO: find out about correct timestamp generation / permissible timestamps
+    return this.httpClient.get(this.compound_endpoint + '/ctoken',
+      {headers: this.httpHeader.headers }
+    )
+      .pipe(
+        retry(1),
+        catchError(this.processError)
+      )
+  }
+
   getYearnVaults(): Observable<any> {
     // ToDO: find out about correct timestamp generation / permissible timestamps
-    return this.httpClient.get(this.aave_endpoint + '/vaults/apy',
+    return this.httpClient.get(this.yearn_endpoint + '/vaults/apy',
       {headers: this.httpHeader.headers }
     )
       .pipe(
@@ -59,15 +72,4 @@ export class HttpClientService {
     return throwError(message);
   }
 
-  // ToDO
-  getCompoundPools(): Observable<any> {
-    // ToDO: find out about correct timestamp generation / permissible timestamps
-    return this.httpClient.get(this.aave_endpoint + '/vaults/apy',
-      {headers: this.httpHeader.headers }
-    )
-      .pipe(
-        retry(1),
-        catchError(this.processError)
-      )
-  }
 }

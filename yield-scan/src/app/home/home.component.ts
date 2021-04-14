@@ -8,19 +8,8 @@ export interface Protocol {
   usdc: string;
   usdt: string;
 }
-const aaveLogo = '../../assets/aave.svg'
-const compoundLogo = '../../assets/compound.svg'
-const curveLogo = '../../assets/curve.svg'
-const idleFinanceLogo = '../../assets/idleFinance.svg'
-const yearnLogo = '../../assets/yearn.png'
 
-const INTEREST_RATES: Protocol[] = [
-  { name: 'Aave', logo: aaveLogo, dai: '11.40', usdc: '10.70', usdt: '6.91'},
-  { name: 'Curve Y', logo: curveLogo, dai: '6.62', usdc: '6.62', usdt: '6.62'},
-  { name: 'Compound', logo: compoundLogo, dai: '5.56', usdc: '5.26', usdt: '2.97'},
-  { name: 'Idle Finance', logo: idleFinanceLogo, dai: '10.50', usdc: '9.90', usdt: '7.15'},
-  { name: 'Yearn Vaults', logo: yearnLogo, dai: '17.65', usdc: '16.83', usdt: '8.01'},
-]
+
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
@@ -32,6 +21,8 @@ export class HomeComponent implements OnInit {
 
   ngOnInit(): void {
     this.fetchAaveInterestRates();
+    this.fetchCompoundInterestRates();
+    this.fetchYearnInterestRates();
   }
 
   stablecoins = ['dai', 'usdt', 'usdc']
@@ -39,52 +30,55 @@ export class HomeComponent implements OnInit {
   usdcLogo = '../../assets/usdc.svg'
   usdtLogo = '../../assets/usdt.svg'
 
-  aaveProtocol: Protocol =  { name: 'Aave', logo: aaveLogo, dai: '', usdc: '', usdt: ''};
-  yearnProtocol: Protocol = { name: 'Yearn Vaults', logo: yearnLogo, dai: '', usdc: '', usdt: ''};
-  compoundProtocol: Protocol = { name: 'Compound', logo: compoundLogo, dai: '', usdc: '', usdt: ''};
-  idleFinanceProtocol: Protocol = { name: 'Idle Finance', logo: idleFinanceLogo, dai: '', usdc: '', usdt: ''};
-  curveProtocol: Protocol = { name: 'Curve Y', logo: curveLogo, dai: '', usdc: '', usdt: ''};
+  aaveLogo = '../../assets/aave.svg'
+  compoundLogo = '../../assets/compound.svg'
+  curveLogo = '../../assets/curve.svg'
+  idleFinanceLogo = '../../assets/idleFinance.svg'
+  yearnLogo = '../../assets/yearn.png'
 
+  aaveProtocol: Protocol =  { name: 'Aave', logo: this.aaveLogo, dai: '', usdc: '', usdt: ''};
+  yearnProtocol: Protocol = { name: 'Yearn Vaults', logo: this.yearnLogo, dai: '', usdc: '', usdt: ''};
+  compoundProtocol: Protocol = { name: 'Compound', logo: this.compoundLogo, dai: '', usdc: '', usdt: ''};
+  idleFinanceProtocol: Protocol = { name: 'Idle Finance', logo: this.idleFinanceLogo, dai: '', usdc: '', usdt: ''};
+  curveProtocol: Protocol = { name: 'Curve Y', logo: this.curveLogo, dai: '', usdc: '', usdt: ''};
 
-  displayedColumns: string[] = ['protocol','dai', 'usdc', 'tether'];
+  displayedColumns: string[] = ['protocol','dai', 'usdc', 'usdt'];
   dataSource = [this.aaveProtocol, this.compoundProtocol, this.yearnProtocol, this.idleFinanceProtocol, this.curveProtocol];
 
   fetchAaveInterestRates(): void {
     this.httpService.getAavePools().subscribe((res) => {
-      let interestRates = this.extractInterestRates(res, 'liquidityRate');
-        this.aaveProtocol.usdc = interestRates.usdc;
-        this.aaveProtocol.usdt = interestRates.usdt;
-        this.aaveProtocol.dai = interestRates.dai;
+      let interestRates = this.extractInterestRates(res, 'liquidityRate', true);
+      this.aaveProtocol.usdt = interestRates.usdt;
+      this.aaveProtocol.dai = interestRates.dai;
+      this.aaveProtocol.usdc = interestRates.usdc;
+
     },
       (error => {
         console.log(error);
       }),
       () => {
-      console.log('fetchAaveInterestRates: complete');
-      console.log(this.aaveProtocol);
       this.dataSource[0] = this.aaveProtocol;
       })
   }
 
   fetchCompoundInterestRates(): void {
     this.httpService.getCompoundPools().subscribe((res) => {
-        let interestRates = this.extractInterestRates(res, 'liquidityRate');
-        this.aaveProtocol.usdc = interestRates.usdc;
-        this.aaveProtocol.usdt = interestRates.usdt;
-        this.aaveProtocol.dai = interestRates.dai;
+        let interestRates = this.extractInterestRates(res.cToken, 'supply_rate', true, 'cdai', 'cusdt', 'cusdc');
+        this.compoundProtocol.usdc = interestRates.usdc;
+        this.compoundProtocol.usdt = interestRates.usdt;
+        this.compoundProtocol.dai = interestRates.dai;
       },
       (error => {
         console.log(error);
       }),
       () => {
-        console.log('fetchAaveInterestRates: complete');
-        console.log(this.aaveProtocol);
-        this.dataSource[0] = this.aaveProtocol;
+        this.dataSource[1] = this.compoundProtocol;
       })
   }
 
   fetchYearnInterestRates(): void {
     this.httpService.getYearnVaults().subscribe((res) => {
+      // Yearn Vaults typically displays weekly apy
         let interestRates = this.extractInterestRates(res, 'apyOneWeekSample');
         this.yearnProtocol.usdc = interestRates.usdc;
         this.yearnProtocol.usdt = interestRates.usdt;
@@ -94,35 +88,53 @@ export class HomeComponent implements OnInit {
         console.log(error);
       }),
       () => {
-        console.log('fetchYearnInterestRates: complete');
-        console.log(this.yearnProtocol);
         this.dataSource[2] = this.yearnProtocol;
       })
   }
 
-  extractInterestRates(data: any, key: string): any{
-    let daiRate = ''
-    let usdtRate = ''
-    let usdcRate = ''
+  extractInterestRates(data: any, key: string,  transform: boolean = false, daiSymbol?: string,
+                        usdtSymbol?: string, usdcSymbol?: string): any{
+    let daiRate: any = ''
+    let usdtRate: any = ''
+    let usdcRate: any = ''
+
+    let dai = (daiSymbol != undefined) ? daiSymbol : 'dai';
+    let usdt = (usdtSymbol != undefined) ? usdtSymbol : 'usdt';
+    let usdc = (usdcSymbol != undefined) ? usdcSymbol : 'usdc';
 
     for(let i=0; i < data.length; i++){
 
-      if(data[i].symbol.toLowerCase() == 'dai'){
+      if(data[i].symbol.toLowerCase() == dai){
         daiRate = data[i][key];
+        if(typeof daiRate == 'object'){
+          daiRate = daiRate.value;
+        }
       }
-      else if(data[i].symbol.toLowerCase() == 'usdt'){
+      else if(data[i].symbol.toLowerCase() == usdt){
         usdtRate = data[i][key];
+        if(typeof usdtRate == 'object'){
+          usdtRate = usdtRate.value;
+        }
       }
-      else if(data[i].symbol.toLowerCase() == 'usdc'){
+      else if(data[i].symbol.toLowerCase() == usdc){
         usdcRate = data[i][key];
+        if(typeof usdcRate == 'object'){
+          usdcRate = usdcRate.value;
+        }
       }
-
       if(daiRate != '' && usdtRate != '' && usdcRate != ''){
-        console.log('extractAaveInterestRates done!');
-        usdtRate = (Number(usdtRate) * 100).toFixed(2);
-        daiRate = (Number(daiRate) * 100).toFixed(2);
-        usdcRate = (Number(usdcRate) * 100).toFixed(2);
-        return {'usdt': usdtRate, 'usdc': usdcRate, 'dai': daiRate};
+
+        if(transform){
+          usdcRate = Number(usdcRate) * 100;
+          usdtRate = Number(usdtRate) * 100;
+          daiRate = Number(daiRate) * 100;
+        }
+
+        return {
+          'usdt': Number(usdtRate).toFixed(2),
+          'usdc': Number(usdcRate).toFixed(2),
+          'dai': Number(daiRate).toFixed(2)
+        };
       }
     }
     return {'usdt': usdtRate, 'usdc': usdcRate, 'dai': daiRate};
