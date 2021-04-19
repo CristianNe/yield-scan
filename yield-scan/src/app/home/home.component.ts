@@ -1,12 +1,45 @@
 import { Component, OnInit } from '@angular/core';
 import {HttpClientService} from "../http/httpclient.service";
+import {createLoweredSymbol} from "@angular/compiler";
 
 export interface Protocol {
-  name: string;
-  logo: string;
-  dai: string;
-  usdc: string;
-  usdt: string;
+  name: string,
+  logo: string,
+  dai: string,
+  usdc: string,
+  usdt: string,
+  busd: string,
+  susd: string,
+  tusd: string
+}
+
+export interface iextractInterestRates{
+  data: any[],
+  apyKey: string,
+  transform: boolean,
+  symbolVar?: string,
+  daiSymbol?: string,
+  usdtSymbol?: string,
+  usdcSymbol?: string,
+  busdSymbol?: string,
+  susdSymbol?: string,
+  tusdSymbol?: string
+}
+
+export interface iInterestRates{
+  dai: string,
+  usdc: string,
+  usdt: string,
+  busd: string,
+  susd: string,
+  tusd: string
+}
+
+const findInMap = (map: Map<String, String>, value: String): boolean => {
+  for(let val in map.values()){
+    if(val == value){ return true }
+  }
+  return false
 }
 
 
@@ -23,35 +56,52 @@ export class HomeComponent implements OnInit {
     this.fetchAaveInterestRates();
     this.fetchCompoundInterestRates();
     this.fetchYearnInterestRates();
+    this.fetch88MphInterestRates();
+    this.fetchVenusInterestRates();
+    this.fetchDefinerInterestRates();
   }
 
-  stablecoins = ['dai', 'usdt', 'usdc']
   daiLogo = '../../assets/dai.svg'
-  usdcLogo = '../../assets/usdc.svg'
   usdtLogo = '../../assets/usdt.svg'
+  usdcLogo = '../../assets/usdc.svg'
+  busdLogo = '../../assets/busd.svg'
+  susdLogo = '../../assets/susd.svg'
+  tusdLogo = '../../assets/tusd.svg'
 
   aaveLogo = '../../assets/aave.svg'
   compoundLogo = '../../assets/compound.svg'
+  yearnLogo = '../../assets/yearn.png'
+  _88mphLogo = '../../assets/88mph.png'
+  venusLogo = '../../assets/venus.png'
+  definerLogo = '../../assets/definer.jpg'
   curveLogo = '../../assets/curve.svg'
   idleFinanceLogo = '../../assets/idleFinance.svg'
-  yearnLogo = '../../assets/yearn.png'
 
-  aaveProtocol: Protocol =  { name: 'Aave', logo: this.aaveLogo, dai: '', usdc: '', usdt: ''};
-  yearnProtocol: Protocol = { name: 'Yearn Vaults', logo: this.yearnLogo, dai: '', usdc: '', usdt: ''};
-  compoundProtocol: Protocol = { name: 'Compound', logo: this.compoundLogo, dai: '', usdc: '', usdt: ''};
-  idleFinanceProtocol: Protocol = { name: 'Idle Finance', logo: this.idleFinanceLogo, dai: '', usdc: '', usdt: ''};
-  curveProtocol: Protocol = { name: 'Curve Y', logo: this.curveLogo, dai: '', usdc: '', usdt: ''};
+  aaveProtocol: Protocol =  { name: 'Aave', logo: this.aaveLogo, dai: '', usdc: '', usdt: '', busd: '', susd: '', tusd: ''};
+  yearnProtocol: Protocol = { name: 'Yearn Vaults', logo: this.yearnLogo, dai: '', usdc: '', usdt: '', busd: '', susd: '', tusd: ''};
+  compoundProtocol: Protocol = { name: 'Compound', logo: this.compoundLogo, dai: '', usdc: '', usdt: '', busd: '', susd: '', tusd: ''};
+  _88mphProtocol: Protocol = { name: '88MPH', logo: this._88mphLogo, dai: '', usdc: '', usdt: '', busd: '', susd: '', tusd: ''};
+  venusProtocol: Protocol = { name: 'Venus', logo: this.venusLogo, dai: '', usdc: '', usdt: '', busd: '', susd: '', tusd: ''};
+  definerProtocol: Protocol = { name: 'Definer', logo: this.definerLogo, dai: '', usdc: '', usdt: '', busd: '', susd: '', tusd: ''};
+  curveProtocol: Protocol = { name: 'Curve Y', logo: this.curveLogo, dai: '', usdc: '', usdt: '', busd: '', susd: '', tusd: ''};
+  idleFinanceProtocol: Protocol = { name: 'Idle Finance', logo: this.idleFinanceLogo, dai: '', usdc: '', usdt: '', busd: '', susd: '', tusd: ''};
 
-  displayedColumns: string[] = ['protocol','dai', 'usdc', 'usdt'];
-  dataSource = [this.aaveProtocol, this.compoundProtocol, this.yearnProtocol, this.idleFinanceProtocol, this.curveProtocol];
+  displayedColumns: string[] = ['protocol','dai', 'usdt', 'usdc', 'busd', 'susd', 'tusd'];
+  dataSource = [
+    this.aaveProtocol,
+    this.compoundProtocol,
+    this.yearnProtocol,
+    this._88mphProtocol,
+    this.venusProtocol,
+    this.definerProtocol,
+    this.idleFinanceProtocol,
+    this.curveProtocol
+    ];
 
   fetchAaveInterestRates(): void {
     this.httpService.getAavePools().subscribe((res) => {
-      let interestRates = this.extractInterestRates(res, 'liquidityRate', true);
-      this.aaveProtocol.usdt = interestRates.usdt;
-      this.aaveProtocol.dai = interestRates.dai;
-      this.aaveProtocol.usdc = interestRates.usdc;
-
+      let interestRates = this.extractInterestRates({data: res, apyKey: 'liquidityRate', transform: true});
+      this.fillProtocolInterestRates(this.aaveProtocol, interestRates);
     },
       (error => {
         console.log(error);
@@ -63,10 +113,9 @@ export class HomeComponent implements OnInit {
 
   fetchCompoundInterestRates(): void {
     this.httpService.getCompoundPools().subscribe((res) => {
-        let interestRates = this.extractInterestRates(res.cToken, 'supply_rate', true, 'cdai', 'cusdt', 'cusdc');
-        this.compoundProtocol.usdc = interestRates.usdc;
-        this.compoundProtocol.usdt = interestRates.usdt;
-        this.compoundProtocol.dai = interestRates.dai;
+        let interestRates = this.extractInterestRates({data: res.cToken, apyKey:'supply_rate', transform: true,
+          daiSymbol: 'cdai', usdtSymbol: 'cusdt', usdcSymbol: 'cusdc'});
+        this.fillProtocolInterestRates(this.compoundProtocol, interestRates);
       },
       (error => {
         console.log(error);
@@ -79,10 +128,8 @@ export class HomeComponent implements OnInit {
   fetchYearnInterestRates(): void {
     this.httpService.getYearnVaults().subscribe((res) => {
       // Yearn Vaults typically displays weekly apy
-        let interestRates = this.extractInterestRates(res, 'apyOneWeekSample');
-        this.yearnProtocol.usdc = interestRates.usdc;
-        this.yearnProtocol.usdt = interestRates.usdt;
-        this.yearnProtocol.dai = interestRates.dai;
+        let interestRates = this.extractInterestRates({data: res, apyKey: 'apyOneWeekSample', transform: false});
+        this.fillProtocolInterestRates(this.yearnProtocol, interestRates);
       },
       (error => {
         console.log(error);
@@ -92,52 +139,98 @@ export class HomeComponent implements OnInit {
       })
   }
 
-  extractInterestRates(data: any, key: string,  transform: boolean = false, daiSymbol?: string,
-                        usdtSymbol?: string, usdcSymbol?: string): any{
-    let daiRate: any = ''
-    let usdtRate: any = ''
-    let usdcRate: any = ''
+  fetch88MphInterestRates(): void {
+    this.httpService.get88MmphPools().subscribe((res) => {
+        // Yearn Vaults typically displays weekly apy
+        let interestRates = this.extractInterestRates({data: res, apyKey: 'oneYearInterestRate', symbolVar: 'tokenSymbol', transform: false});
+        this.fillProtocolInterestRates(this._88mphProtocol, interestRates);
+      },
+      (error => {
+        console.log(error);
+      }),
+      () => {
+        this.dataSource[3] = this._88mphProtocol;
+      })
+  }
 
-    let dai = (daiSymbol != undefined) ? daiSymbol : 'dai';
-    let usdt = (usdtSymbol != undefined) ? usdtSymbol : 'usdt';
-    let usdc = (usdcSymbol != undefined) ? usdcSymbol : 'usdc';
+  fetchVenusInterestRates(): void {
+    this.httpService.getVenusPools().subscribe((res) => {
+        // Yearn Vaults typically displays weekly apy
+        let interestRates = this.extractInterestRates({data: res.data.markets, apyKey: 'supplyApy', symbolVar: 'underlyingSymbol',transform: false});
+        this.fillProtocolInterestRates(this.venusProtocol, interestRates);
+      },
+      (error => {
+        console.log(error);
+      }),
+      () => {
+        this.dataSource[4] = this.venusProtocol;
+      })
+  }
 
-    for(let i=0; i < data.length; i++){
+  fetchDefinerInterestRates(): void {
+    this.httpService.getDefinerPools().subscribe((res) => {
+        // Yearn Vaults typically displays weekly apy
+        let interestRates = this.extractInterestRates({data: res.data, apyKey: 'deposit_apr', transform: false});
+        this.fillProtocolInterestRates(this.definerProtocol, interestRates);
+      },
+      (error => {
+        console.log(error);
+      }),
+      () => {
+        this.dataSource[5] = this.definerProtocol;
+      })
+  }
 
-      if(data[i].symbol.toLowerCase() == dai){
-        daiRate = data[i][key];
-        if(typeof daiRate == 'object'){
-          daiRate = daiRate.value;
+  // @ts-ignore
+  extractInterestRates(params: iextractInterestRates): any{
+
+    let rates = new Map()
+    rates.set('dai', 0)
+    rates.set('usdt', 0)
+    rates.set('usdc', 0)
+    rates.set('busd', 0)
+    rates.set('susd', 0)
+    rates.set('tusd', 0)
+
+    let symbols = new Map()
+    symbols.set((params.daiSymbol != undefined) ? params.daiSymbol : 'dai', 'dai');
+    symbols.set((params.usdtSymbol != undefined) ? params.usdtSymbol : 'usdt', 'usdt');
+    symbols.set((params.usdcSymbol != undefined) ? params.usdcSymbol : 'usdc', 'usdc');
+    symbols.set((params.busdSymbol != undefined) ? params.busdSymbol : 'busd', 'busd');
+    symbols.set((params.susdSymbol != undefined) ? params.susdSymbol : 'susd', 'susd');
+    symbols.set((params.tusdSymbol != undefined) ? params.tusdSymbol : 'tusd', 'tusd');
+
+    let symbol = (params.symbolVar != undefined) ? params.symbolVar : 'symbol';
+
+    for(let i=0; i < params.data.length; i++){
+      let ticker = params.data[i][symbol].toLowerCase()
+      if(symbols.has(ticker)){
+        let stablecoin = symbols.get(ticker)
+        rates.set(stablecoin, params.data[i][params.apyKey]);
+        if(typeof rates.get(stablecoin) == 'object'){
+          rates.set(stablecoin, rates.get(stablecoin).value);
         }
-      }
-      else if(data[i].symbol.toLowerCase() == usdt){
-        usdtRate = data[i][key];
-        if(typeof usdtRate == 'object'){
-          usdtRate = usdtRate.value;
-        }
-      }
-      else if(data[i].symbol.toLowerCase() == usdc){
-        usdcRate = data[i][key];
-        if(typeof usdcRate == 'object'){
-          usdcRate = usdcRate.value;
-        }
-      }
-      if(daiRate != '' && usdtRate != '' && usdcRate != ''){
-
-        if(transform){
-          usdcRate = Number(usdcRate) * 100;
-          usdtRate = Number(usdtRate) * 100;
-          daiRate = Number(daiRate) * 100;
-        }
-
-        return {
-          'usdt': Number(usdtRate).toFixed(2),
-          'usdc': Number(usdcRate).toFixed(2),
-          'dai': Number(daiRate).toFixed(2)
-        };
       }
     }
-    return {'usdt': usdtRate, 'usdc': usdcRate, 'dai': daiRate};
+    if(params.transform){
+      rates.forEach((rate, key) => {
+        rates.set(key, Number(rate) * 100)
+      })
+    }
+    let data: any = {}
+    symbols.forEach((symbol) => {
+      data[symbol] = (rates.get(symbol) == 0) ? '--' : Number(rates.get(symbol)).toFixed(2);
+    });
+    return data
+  }
+
+  fillProtocolInterestRates(protocol: Protocol, interestRates: any): void{
+    protocol.dai = interestRates.dai;
+    protocol.usdt = interestRates.usdt;
+    protocol.usdc = interestRates.usdc;
+    protocol.busd = interestRates.busd;
+    protocol.susd = interestRates.susd;
+    protocol.tusd = interestRates.tusd;
   }
 
 }

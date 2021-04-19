@@ -16,6 +16,13 @@
     <td mat-cell *matCellDef="let protocol"> {{protocol.dai}}% </td>
   </ng-container>
 
+  <ng-container matColumnDef="usdt">
+    <th mat-header-cell *matHeaderCellDef>
+      <img src="{{usdtLogo}}" height="32" alt=""> &nbsp;&nbsp;USDT
+    </th>
+    <td mat-cell *matCellDef="let protocol"> {{protocol.usdt}}% </td>
+  </ng-container>
+
   <ng-container matColumnDef="usdc">
     <th mat-header-cell *matHeaderCellDef>
       <img src="{{usdcLogo}}" height="32" alt=""> &nbsp;&nbsp;USDC
@@ -23,12 +30,27 @@
     <td mat-cell *matCellDef="let protocol"> {{protocol.usdc}}% </td>
   </ng-container>
 
-  <ng-container matColumnDef="usdt">
+  <ng-container matColumnDef="busd">
     <th mat-header-cell *matHeaderCellDef>
-      <img src="{{usdtLogo}}" height="32" alt=""> &nbsp;&nbsp;USDT
+      <img src="{{busdLogo}}" height="32" alt=""> &nbsp;&nbsp;BUSD
     </th>
-    <td mat-cell *matCellDef="let protocol"> {{protocol.usdt}}% </td>
+    <td mat-cell *matCellDef="let protocol"> {{protocol.busd}}% </td>
   </ng-container>
+
+  <ng-container matColumnDef="susd">
+    <th mat-header-cell *matHeaderCellDef>
+      <img src="{{susdLogo}}" height="32" alt=""> &nbsp;&nbsp;sUSD
+    </th>
+    <td mat-cell *matCellDef="let protocol"> {{protocol.susd}}% </td>
+  </ng-container>
+
+  <ng-container matColumnDef="tusd">
+    <th mat-header-cell *matHeaderCellDef>
+      <img src="{{tusdLogo}}" height="32" alt=""> &nbsp;&nbsp;TUSD
+    </th>
+    <td mat-cell *matCellDef="let protocol"> {{protocol.tusd}}% </td>
+  </ng-container>
+
 
   <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
   <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>

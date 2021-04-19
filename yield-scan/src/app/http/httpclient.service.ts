@@ -14,6 +14,9 @@ export class HttpClientService {
   aave_endpoint = 'https://aave-api-v2.aave.com';
   yearn_endpoint = 'https://dev-api.yearn.tools';
   compound_endpoint = 'https://api.compound.finance/api/v2';
+  _88mph_endpoint = 'https://api.88mph.app';
+  venus_endpoint = 'https://api.venus.io/api';
+  definer_endpoint = 'https://stat.definer.org/api_v2';
 
   constructor(private httpClient: HttpClient) {
   }
@@ -38,7 +41,6 @@ export class HttpClientService {
       )
   }
 
-  // ToDO
   getCompoundPools(): Observable<any> {
     // ToDO: find out about correct timestamp generation / permissible timestamps
     return this.httpClient.get(this.compound_endpoint + '/ctoken',
@@ -54,6 +56,37 @@ export class HttpClientService {
     // ToDO: find out about correct timestamp generation / permissible timestamps
     return this.httpClient.get(this.yearn_endpoint + '/vaults/apy',
       {headers: this.httpHeader.headers }
+    )
+      .pipe(
+        retry(1),
+        catchError(this.processError)
+      )
+  }
+
+  get88MmphPools(): Observable<any> {
+    // ToDO: find out about correct timestamp generation / permissible timestamps
+    return this.httpClient.get(this._88mph_endpoint + '/pools',
+      {headers: this.httpHeader.headers }
+    )
+      .pipe(
+        retry(1),
+        catchError(this.processError)
+      )
+  }
+
+  getVenusPools(): Observable<any>{
+    return this.httpClient.get(this.venus_endpoint + '/vtoken',
+      {headers: this.httpHeader.headers}
+      )
+      .pipe(
+        retry(1),
+        catchError(this.processError)
+      )
+  }
+
+  getDefinerPools(): Observable<any>{
+    return this.httpClient.get(this.definer_endpoint + '/market/token_status',
+      {headers: this.httpHeader.headers}
     )
       .pipe(
         retry(1),
